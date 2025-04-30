@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="" class="logo">BANK SAMPAH JUARA</a>
+            <ul class="menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="jenis dan harga.html">jenis dan harga</a></li>
+                <li><a href="formulir.html">formulir</a></li>
+                <li><a href="kritikdansaran.html">Kritik dan saran</a></li>
+                <li><a href="kontakkami.html">Kontak kami</a></li>
+            </ul>
+            <div class="tombol">&#9776;</div>
+        </div>
+    </nav>
+    <!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Penjualan</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 30px auto;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="email"],
+        .form-container input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .form-container input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin-top: 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .form-container input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .form-container .radio-group label {
+            margin-right: 20px;
+        }
+
+        .records {
+            margin: 30px auto;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .record {
+            background-color: #fff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .record button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .record button:hover {
+            background-color: #ff6666;
+        }
+
+        .edit-button {
+            background-color: #ffa500;
+        }
+
+        .edit-button:hover {
+            background-color: #ffb84d;
+        }
+
+        .download-button {
+            background-color: #4CAF50;
+            margin-left: 10px;
+        }
+
+        .download-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>FORMULIR PENJUALAN</h1>
+
+    <div class="form-container">
+        <form id="salesForm">
+            <fieldset>
+                <label for="NamaLengkap">Nama Lengkap: </label>
+                <input type="text" name="Nama Lengkap" id="NamaLengkap" required><br>
+
+                <label for="Kelas">Kelas: </label>
+                <input type="text" name="Kelas" id="Kelas" required><br>
+
+                <div class="radio-group">
+                    <label>Pilih Jenis Kelamin: </label><br>
+                    <input type="radio" name="JenisKelamin" value="Laki-laki"> Laki-laki<br>
+                    <input type="radio" name="JenisKelamin" value="Perempuan"> Perempuan<br><br>
+                </div>
+
+                <div class="radio-group">
+                    <label>Pilih Jenis Sampah: </label><br>
+                    <input type="radio" name="JenisSampah" value="Plastik"> Plastik<br>
+                    <input type="radio" name="JenisSampah" value="Kaleng"> Kaleng<br>
+                    <input type="radio" name="JenisSampah" value="Buah-buahan/Sayuran"> Buah-buahan<br><br>
+                </div>
+
+                <div class="radio-group">
+                    <label>Berat Sampah (kg): </label><br>
+                    <input type="number" name="berat sampah" id="BeratSampah" min="0" step="0.1" required><br>
+                </div>
+
+                <label for="Email">Email: </label><br>
+                <input type="email" name="Email" id="Email" required><br><br>
+
+                <input type="submit" value="Submit">
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="records" id="recordsList">
+        <h2>Struk Penjualan yang Disimpan:</h2>
+        <!-- Records will appear here -->
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", loadRecords);
+
+        let editIndex = -1;
+        const PRICE_PER_KG = 5000;
+
+        document.getElementById("salesForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const namaLengkap = document.getElementById("NamaLengkap").value;
+            const kelas = document.getElementById("Kelas").value;
+            const jenisKelamin = document.querySelector('input[name="JenisKelamin"]:checked')?.value;
+            const jenisSampah = document.querySelector('input[name="JenisSampah"]:checked')?.value;
+            const beratSampah = parseFloat(document.getElementById("BeratSampah").value);
+            const email = document.getElementById("Email").value;
+
+            const totalHarga = beratSampah * PRICE_PER_KG;
+
+            const struk = {
+                namaLengkap,
+                kelas,
+                jenisKelamin,
+                jenisSampah,
+                beratSampah,
+                totalHarga,
+                email
+            };
+
+            if (editIndex === -1) {
+                saveRecord(struk);
+            } else {
+                updateRecord(struk, editIndex);
+            }
+
+            loadRecords();
+            document.getElementById("salesForm").reset();
+            editIndex = -1;
+        });
+
+        function saveRecord(struk) {
+            const struks = getRecords();
+            struks.push(struk);
+            localStorage.setItem("salesRecords", JSON.stringify(struks));
+        }
+
+        function getRecords() {
+            const records = localStorage.getItem("salesRecords");
+            return records ? JSON.parse(records) : [];
+        }
+
+        function loadRecords() {
+            const recordsList = document.getElementById("recordsList");
+            const records = getRecords();
+
+            recordsList.innerHTML = "<h2>Struk Penjualan yang Disimpan:</h2>";
+
+            if (records.length === 0) {
+                recordsList.innerHTML += "<p>Tidak ada struk yang disimpan.</p>";
+            } else {
+                records.forEach((struk, index) => {
+                    const recordDiv = document.createElement("div");
+                    recordDiv.classList.add("record");
+                    recordDiv.innerHTML = `
+                        <div>
+                            <strong>Nama:</strong> ${struk.namaLengkap} <br>
+                            <strong>Kelas:</strong> ${struk.kelas} <br>
+                            <strong>Jenis Kelamin:</strong> ${struk.jenisKelamin} <br>
+                            <strong>Jenis Sampah:</strong> ${struk.jenisSampah} <br>
+                            <strong>Berat Sampah:</strong> ${struk.beratSampah} kg<br>
+                            <strong>Total Harga:</strong> Rp ${formatRupiah(struk.totalHarga)} <br>
+                            <strong>Email:</strong> ${struk.email}
+                        </div>
+                        <div>
+                            <button class="edit-button" onclick="editRecord(${index})">Edit</button>
+                            <button onclick="deleteRecord(${index})">Delete</button>
+                            <button class="download-button" onclick="downloadReceipt(${index})">Download</button>
+                        </div>
+                    `;
+                    recordsList.appendChild(recordDiv);
+                });
+            }
+        }
+
+        function deleteRecord(index) {
+            const records = getRecords();
+            records.splice(index, 1);
+            localStorage.setItem("salesRecords", JSON.stringify(records));
+            loadRecords();
+        }
+
+        function editRecord(index) {
+            const records = getRecords();
+            const record = records[index];
+
+            document.getElementById("NamaLengkap").value = record.namaLengkap;
+            document.getElementById("Kelas").value = record.kelas;
+            document.querySelector(`input[name="JenisKelamin"][value="${record.jenisKelamin}"]`).checked = true;
+            document.querySelector(`input[name="JenisSampah"][value="${record.jenisSampah}"]`).checked = true;
+            document.getElementById("BeratSampah").value = record.beratSampah;
+            document.getElementById("Email").value = record.email;
+
+            editIndex = index;
+        }
+
+        function updateRecord(struk, index) {
+            const records = getRecords();
+            records[index] = struk;
+            localStorage.setItem("salesRecords", JSON.stringify(records));
+        }
+
+        function formatRupiah(number) {
+            return new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(number).replace(/,00$/, "");
+        }
+
+        async function downloadReceipt(index) {
+            const { jsPDF } = window.jspdf;
+            const records = getRecords();
+            const struk = records[index];
+            const doc = new jsPDF();
+
+            doc.setFont("helvetica", "normal");
+            doc.text("Struk Penjualan Sampah", 10, 10);
+            doc.text(`Nama: ${struk.namaLengkap}`, 10, 20);
+            doc.text(`Kelas: ${struk.kelas}`, 10, 30);
+            doc.text(`Jenis Kelamin: ${struk.jenisKelamin}`, 10, 40);
+            doc.text(`Jenis Sampah: ${struk.jenisSampah}`, 10, 50);
+            doc.text(`Berat Sampah: ${struk.beratSampah} kg`, 10, 60);
+            doc.text(`Total Harga: Rp ${formatRupiah(struk.totalHarga)}`, 10, 70);
+            doc.text(`Email: ${struk.email}`, 10, 80);
+
+            doc.save(`Struk_${struk.namaLengkap}.pdf`);
+        }
+    </script>
+</body>
+</html>
+
+</body>
+</html>

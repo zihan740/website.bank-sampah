@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+	<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="script.js">
+    <link rel="stylesheet" href="kritik.css">
+</head>
+<body>
+    <nav class="navbar">
+	<div class="container">
+            <a href="" class="logo">BANK SAMPAH JUARA</a>
+            <ul class="menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="jenis dan harga.html">jenis dan harga</a></li>
+                <li><a href="formulir.html">formulir</a></li>
+                <li><a href="kritikdansaran.html">Kritik dan saran</a></li>
+                <li><a href="kontakkami.html">Kontak kami</a></li>
+            </ul>
+            <div class="tombol">&#9776;</div>
+	</div>
+    </nav>
+    <section class="contact-section" id="contact">
+        <h2 align="center">Formulir Kritik dan Saran</h2>
+        <form action="" method="post" name="contact-form" class="contact-form">
+            <div class="form-group">
+                <label for="nama">Nama:</label>
+                <input type="text" id="name" name="Name" placeholder="Masukkan Nama Anda" required />
+            </div>
+            <br>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="Email" placeholder="Masukkan Email Anda" required />
+            </div>
+            <br>
+            <div class="form-group-area">
+                <textarea name="Pesan" rows="5" placeholder="Masukkan Pesan Anda" required></textarea>
+            </div>
+            <br>
+            <input type="submit" class="btn-selesai" value="Submit" id="submit" style="font-size: large;">
+        </form>
+        <script>
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbwdnPYIAUnQJ2w_eezCAUq5Fs60g2jgT3e_xGKKiABD-FKRzHkSp-DuMaC_9n6PWdq3/exec'
+            const form = document.forms['contact-form']
+          
+            form.addEventListener('submit', e => {
+              e.preventDefault()
+              fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(_response => alert("Succes!"))
+                .then(() => {window.location.reload(); })
+                .catch(error => console.error('Error!', error.message))
+            })
+          </script>
+       </section>
+       
+    <script src="script.js"></script>
+</body>
+</html>
